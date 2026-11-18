@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jujutsu Life — Simulador de Vida y RPG de Jujutsu Kaisen</title>
+  <link rel="stylesheet" href="/src/styles/main.css" />
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <!-- Cabecera global -->
+    <header class="app-header" role="banner">
+      <div class="brand-block">
+        <span class="brand-sigil" aria-hidden="true">呪</span>
+        <div>
+          <h1 class="brand-title">Jujutsu Life</h1>
+          <p class="brand-subtitle">Simulador de Vida Completa y RPG Táctico en el Mundo de Jujutsu Kaisen</p>
+        </div>
+      </div>
+
+      <div id="header-meta" class="header-meta" aria-live="polite">
+        <!-- Se hidrata dinámicamente desde render.js -->
+      </div>
+
+      <div class="header-actions">
+        <button type="button" id="btn-open-tutorial" class="btn btn-primary btn-sm" title="Abrir tutorial interactivo de 20 etapas">
+          Tutorial (20 Etapas)
+        </button>
+        <button type="button" id="btn-quick-save" class="btn btn-secondary btn-sm" title="Guardar en ranura rápida">
+          Guardar rápido
+        </button>
+        <button type="button" id="btn-open-saves" class="btn btn-outline btn-sm" title="Abrir gestión de partidas">
+          Partidas
+        </button>
+        <button type="button" id="btn-new-life" class="btn btn-danger btn-sm" title="Iniciar una nueva vida">
+          Nueva vida
+        </button>
+      </div>
+    </header>
+
+    <!-- Barra de navegación principal (13 secciones del Simulador de Vida) -->
+    <nav id="main-nav" class="main-nav" role="navigation" aria-label="Secciones principales">
+      <button type="button" class="nav-tab is-active" data-tab="vida" aria-selected="true">
+        <span class="nav-code">01</span><span class="nav-label">Vida</span>
+      </button>
+      <button type="button" class="nav-tab" data-tab="familia" aria-selected="false">
+        <span class="nav-code">02</span><span class="nav-label">Familia</span>
+      </button>
+      <button type="button" class="nav-tab" data-tab="colegio" aria-selected="false">
+        <span class="nav-code">03</span><span class="nav-label">Colegio</span>
+      </button>
+      <button type="button" class="nav-tab" data-tab="relaciones" aria-selected="false">
+        <span class="nav-code">04</span><span class="nav-label">Relaciones</span>
+      </button>
+      <button type="button" class="nav-tab" data-tab="entrenamiento" aria-selected="false">
+        <span class="nav-code">05</span><span class="nav-label">Entrenamiento</span>
+      </button>
+      <button type="button" class="nav-tab" data-tab="hechiceria" aria-selected="false">
+        <span class="nav-code">06</span><span class="nav-label">Hechicería</span>
+      </button>
+      <button type="button" class="nav-tab" data-tab="misiones" aria-selected="false">
+        <span class="nav-code">07</span><span class="nav-label">Misiones</span>
+      </button>
+      <button type="button" class="nav-tab" data-tab="viajes" aria-selected="false">
+        <span class="nav-code">08</span><span class="nav-label">Viajes</span>
+      </button>
+      <button type="button" class="nav-tab" data-tab="economia" aria-selected="false">
+        <span class="nav-code">09</span><span class="nav-label">Economía</span>
+      </button>
+      <button type="button" class="nav-tab" data-tab="inventario" aria-selected="false">
+        <span class="nav-code">10</span><span class="nav-label">Inventario</span>
+      </button>
+      <button type="button" class="nav-tab" data-tab="mundo" aria-selected="false">
+        <span class="nav-code">11</span><span class="nav-label">Mundo</span>
+      </button>
+      <button type="button" class="nav-tab" data-tab="bitacora" aria-selected="false">
+        <span class="nav-code">12</span><span class="nav-label">Bitácora</span>
+      </button>
+      <button type="button" class="nav-tab" data-tab="configuracion" aria-selected="false">
+        <span class="nav-code">13</span><span class="nav-label">Configuración</span>
+      </button>
+    </nav>
+
+    <!-- Layout de 3 columnas en escritorio / apilado en móvil -->
+    <div class="workspace-grid">
+      <!-- Panel lateral izquierdo: Ficha de personaje y barras de estado -->
+      <aside id="sidebar-stats" class="panel sidebar-panel" aria-label="Estadísticas del hechicero">
+        <!-- Renderizado dinámico -->
+      </aside>
+
+      <!-- Área central: Vista activa, creación de personaje, pantalla previa o combate -->
+      <main id="main-view" class="panel main-panel" role="main" tabindex="-1">
+        <!-- Renderizado dinámico -->
+      </main>
+
+      <!-- Panel lateral derecho: Bitácora reciente y estado del mundo -->
+      <aside id="sidebar-log" class="panel sidebar-panel" aria-label="Bitácora reciente y alertas">
+        <!-- Renderizado dinámico -->
+      </aside>
+    </div>
+
+    <!-- Overlay a PANTALLA COMPLETA para Eventos Principales -->
+    <div id="fullscreen-event-overlay" class="fullscreen-event-overlay is-hidden" role="dialog" aria-modal="true" aria-label="Evento Principal">
+      <!-- Renderizado dinámico cuando hay un evento activo -->
+    </div>
+
+    <!-- Contenedor de notificaciones flotantes no intrusivas -->
+    <div id="toast-container" class="toast-container" aria-live="assertive" aria-atomic="true"></div>
+
+    <!-- Modal genérico para Tutorial, Confirmaciones, Minijuegos y Gestión de Partidas -->
+    <div id="modal-overlay" class="modal-overlay is-hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h2 id="modal-title" class="modal-title">Gestión de Partida</h2>
+          <button type="button" id="btn-close-modal" class="btn btn-outline btn-sm" aria-label="Cerrar ventana">
+            Cerrar
+          </button>
+        </div>
+        <div id="modal-body" class="modal-body"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
